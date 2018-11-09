@@ -1,4 +1,4 @@
-import {BigInteger} from 'jsbn'
+import {BigInteger, SecureRandom} from 'jsbn'
 import {
 	ECPointFp,
 	ECFieldElementFp,

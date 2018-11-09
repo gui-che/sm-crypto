@@ -7,7 +7,7 @@
   "scripts": {
 		"start": "rc-tools run compile --babel-runtime --copy-files",
     "test": "jest test/**/*.test.js",
-    "build": "webpack"
+		"build": "yarn start && git add . && git commit -m '[compile]' && git pull && git push"
   },
   "repository": {
     "type": "git",

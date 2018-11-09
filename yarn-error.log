@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/Cellar/yarn/1.5.1_1/libexec/bin/yarn.js start
+  /usr/local/bin/node /usr/local/Cellar/yarn/1.5.1_1/libexec/bin/yarn.js build
 
 PATH: 
   /usr/local/opt/openssl/bin:/Users/gc/.rbenv/shims:/Users/gc/Library/Android/sdk:/Users/gc/Documents/Gradle/gradle-4.2/bin:/Users/gc/.jenv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/Wireshark.app/Contents/MacOS:/Users/gc/Library/Android/sdk/platform-tools/:/Users/gc/Library/Android/sdk/ndk-bundle/:/usr/local/bin:/Users/gc/.rvm/bin
@@ -16,14 +16,14 @@ Platform:
 npm manifest: 
   {
     "name": "sm-crypto",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "description": "sm-crypto",
   	"main": "./lib/index",
     "module": "./es/index",
     "scripts": {
   		"start": "rc-tools run compile --babel-runtime --copy-files",
       "test": "jest test/**/*.test.js",
-      "build": "webpack"
+  		"build": "yarn compile && git add . && git commit -m '[compile]' && git pull && git push"
     },
     "repository": {
       "type": "git",
@@ -7782,7 +7782,7 @@ Trace:
   Error: Command failed.
   Exit code: 1
   Command: sh
-  Arguments: -c rc-tools run compile --babel-runtime --copy-files
+  Arguments: -c yarn compile && git add . && git commit -m '[compile]' && git pull && git push
   Directory: /Users/gc/Documents/work/gc-sm
   Output:
   
