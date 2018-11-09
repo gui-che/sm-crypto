@@ -1,5 +1,10 @@
-const { BigInteger, SecureRandom } = require('jsbn');
-const { ECCurveFp } = require ('./ec');
+import {BigInteger} from 'jsbn'
+import {
+	ECPointFp,
+	ECFieldElementFp,
+	ECCurveFp,
+} from './ec'
+
 
 let rng = new SecureRandom();
 let { G, n } = generateEcparam();
@@ -7,7 +12,7 @@ let { G, n } = generateEcparam();
  /**
  * 生成ecparam
  */
-function generateEcparam() {
+export function generateEcparam() {
     let p = new BigInteger('FFFFFFFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000FFFFFFFFFFFFFFFF', 16);
     let a = new BigInteger('FFFFFFFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000FFFFFFFFFFFFFFFC', 16);
     let b = new BigInteger('28E9FA9E9D9F5E344D5A9E4BCF6509A7F39789F515AB8F92DDBCBD414D940E93', 16);
@@ -23,7 +28,7 @@ function generateEcparam() {
 /**
  * 生成密钥对
  */
-function generateKeyPairHex() {
+export function generateKeyPairHex() {
     let d = new BigInteger(n.bitLength(), rng).mod(n.subtract(BigInteger.ONE)).add(BigInteger.ONE); // 随机数
     let privateKey = leftPad(d.toString(16), 64);
 
@@ -41,7 +46,7 @@ function generateKeyPairHex() {
 /**
  * 解析utf8字符串到16进制
  */
-function parseUtf8StringToHex(input) {
+export function parseUtf8StringToHex(input) {
     input = unescape(encodeURIComponent(input));
 
     let length = input.length;
@@ -66,14 +71,14 @@ function parseUtf8StringToHex(input) {
 /**
  * 解析arrayBuffer到16进制字符串
  */
-function parseArrayBufferToHex(input) {
+export function parseArrayBufferToHex(input) {
     return Array.prototype.map.call(new Uint8Array(input), x => ('00' + x.toString(16)).slice(-2)).join('');
 }
 
 /**
  * 补全16进制字符串
  */
-function leftPad(input, num) {
+export function leftPad(input, num) {
     if (input.length >= num) return input;
 
     return (new Array(num - input.length + 1)).join('0') + input
@@ -82,14 +87,14 @@ function leftPad(input, num) {
 /**
  * 转成16进制串
  */
-function arrayToHex(arr) {
+export function arrayToHex(arr) {
     let words = [];
     let j = 0;
     for (let i = 0; i < arr.length * 2; i += 2) {
         words[i >>> 3] |= parseInt(arr[j]) << (24 - (i % 8) * 4);
         j++;
     }
-    
+
     // 转换到16进制
     let hexChars = [];
     for (let i = 0; i < arr.length; i++) {
@@ -104,7 +109,7 @@ function arrayToHex(arr) {
 /**
  * 转成utf8串
  */
-function arrayToUtf8(arr) {
+export function arrayToUtf8(arr) {
     let words = [];
     let j = 0;
     for (let i = 0; i < arr.length * 2; i += 2) {
@@ -129,7 +134,7 @@ function arrayToUtf8(arr) {
 /**
  * 转成ascii码数组
  */
-function hexToArray(hexStr) {
+export function hexToArray(hexStr) {
     let words = [];
     let hexStrLength = hexStr.length;
 
@@ -145,13 +150,13 @@ function hexToArray(hexStr) {
     return words
 }
 
-module.exports = {
-    generateEcparam,
-    generateKeyPairHex,
-    parseUtf8StringToHex,
-    parseArrayBufferToHex,
-    leftPad,
-    arrayToHex,
-    arrayToUtf8,
-    hexToArray,
-};
+export default {
+	generateEcparam,
+	generateKeyPairHex,
+	parseUtf8StringToHex,
+	parseArrayBufferToHex,
+	leftPad,
+	arrayToHex,
+	arrayToUtf8,
+	hexToArray,
+}

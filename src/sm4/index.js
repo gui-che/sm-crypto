@@ -65,20 +65,20 @@ function sms4Crypt(input, output, roundKey) {
         mid = x[1] ^ x[2] ^ x[3] ^ roundKey[r + 0];
         mid = byteSub(mid);
         x[0] = x[0] ^ l1(mid); // x4
-        
+
         mid = x[2] ^ x[3] ^ x[0] ^ roundKey[r + 1];
         mid = byteSub(mid);
         x[1] = x[1] ^ l1(mid); // x5
-        
+
         mid = x[3] ^ x[0] ^ x[1] ^ roundKey[r + 2];
         mid = byteSub(mid);
         x[2] = x[2] ^ l1(mid); // x6
-        
+
         mid = x[0] ^ x[1] ^ x[2] ^ roundKey[r + 3];
         mid = byteSub(mid);
         x[3] = x[3] ^ l1(mid); // x7
     }
-    
+
     //Reverse
     for(let j = 0; j < 16; j += 4) {
         output[j] = x[3 - j / 4] >>> 24 & 0xff;
@@ -111,20 +111,20 @@ function sms4KeyExt(key, roundKey, cryptFlag) {
         mid = x[1] ^ x[2] ^ x[3] ^ CK[r+0];
         mid = byteSub(mid);
         roundKey[r + 0] = x[0] ^= l2(mid); // roundKey0 = K4
-        
+
         mid = x[2] ^ x[3] ^ x[0] ^ CK[r+1];
         mid = byteSub(mid);
         roundKey[r + 1] = x[1] ^= l2(mid); // roundKey1 = K5
-        
+
         mid = x[3] ^ x[0] ^ x[1] ^ CK[r+2];
         mid = byteSub(mid);
         roundKey[r + 2] = x[2] ^= l2(mid); // roundKey2 = K6
-        
+
         mid = x[0] ^ x[1] ^ x[2] ^ CK[r + 3];
         mid = byteSub(mid);
         roundKey[r + 3] = x[3] ^= l2(mid); // roundKey3 = K7
     }
-        
+
     // 解密时轮密钥使用顺序：roundKey31, roundKey30, ..., roundKey0
     if(cryptFlag === DECRYPT) {
         for(r = 0; r < 16; r++) {
@@ -138,7 +138,7 @@ function sms4KeyExt(key, roundKey, cryptFlag) {
 function sm4(inArray, key, cryptFlag) {
     let outArray = [];
     let point = 0;
-    let roundKey = new Array(ROUND); 
+    let roundKey = new Array(ROUND);
     sms4KeyExt(key, roundKey, cryptFlag);
 
     let input = new Array(16);
@@ -148,7 +148,7 @@ function sm4(inArray, key, cryptFlag) {
     while (inLen >= BLOCK) {
         input = inArray.slice(point, point + 16);
         sms4Crypt(input, output, roundKey);
-        
+
         for (let i = 0; i < BLOCK; i++) {
             outArray[point + i] = output[i];
         }
@@ -160,11 +160,15 @@ function sm4(inArray, key, cryptFlag) {
     return outArray;
 }
 
-module.exports = {
-    encrypt(inArray, key) {
-        return sm4(inArray, key, 1);
-    },
-    decrypt(inArray, key) {
-        return sm4(inArray, key, 0);
-    }
-};
+export function encrypt(inArray, key) {
+		return sm4(inArray, key, 1);
+}
+
+export function decrypt(inArray, key) {
+		return sm4(inArray, key, 0);
+}
+
+export default {
+	encrypt,
+	decrypt,
+}

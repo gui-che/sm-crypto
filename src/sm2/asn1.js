@@ -1,4 +1,4 @@
-const { BigInteger } = require('jsbn');
+import {BigInteger} from 'jsbn'
 
 function bigIntToMinTwosComplementsHex(bigIntegerValue) {
     let h = bigIntegerValue.toString(16);
@@ -26,7 +26,7 @@ function bigIntToMinTwosComplementsHex(bigIntegerValue) {
     }
     return h;
 }
- 
+
 /**
  * base class for ASN.1 DER encoder object
  */
@@ -38,7 +38,7 @@ class ASN1Object {
         this.hL = '00';
         this.hV = '';
     }
- 
+
     /**
      * get hexadecimal ASN.1 TLV length(L) bytes from TLV value(V)
      */
@@ -56,7 +56,7 @@ class ASN1Object {
             return head.toString(16) + hN;
         }
     }
- 
+
     /**
      * get hexadecimal string of ASN.1 TLV bytes
      */
@@ -69,12 +69,12 @@ class ASN1Object {
         }
         return this.hTLV;
     }
- 
+
     getFreshValueHex() {
         return '';
     }
 };
- 
+
 /**
  * class for ASN.1 DER Integer
  */
@@ -89,7 +89,7 @@ class DERInteger extends ASN1Object {
             this.hV = bigIntToMinTwosComplementsHex(options.bigint);
         }
     }
- 
+
     getFreshValueHex() {
         return this.hV;
     }
@@ -102,7 +102,7 @@ class DERSequence extends ASN1Object {
 
     constructor(options) {
         super();
-     
+
         this.hT = '30';
         this.asn1Array = [];
         if (options && options.array) {
@@ -198,46 +198,44 @@ function getPosArrayOfChildren(h, pos) {
         var pNext = getPosOfNextSibling(h, p);
         if (pNext === null || (pNext - p0  >= (len * 2))) break;
         if (k >= 200) break;
-        
+
         a.push(pNext);
         p = pNext;
-        
+
         k++;
     }
 
     return a;
 }
 
-module.exports = {
-    /**
-     * ASN.1 DER编码
-     */
-    encodeDer(r, s) {
-        let derR = new DERInteger({ bigint: r });
-        let derS = new DERInteger({ bigint: s });
-        let derSeq = new DERSequence({ array: [derR, derS] });
+/**
+ * ASN.1 DER编码
+ */
+export function encodeDer(r, s) {
+		let derR = new DERInteger({ bigint: r });
+		let derS = new DERInteger({ bigint: s });
+		let derSeq = new DERSequence({ array: [derR, derS] });
 
-        return derSeq.getEncodedHex();
-    },
+		return derSeq.getEncodedHex();
+}
 
-    /**
-     * 解析 ASN.1 DER
-     */
-    decodeDer(input) {
-        // 1. Items of ASN.1 Sequence Check
-        let a = getPosArrayOfChildren(input, 0);
-        
-        // 2. Integer check
-        let iTLV1 = a[0];
-        let iTLV2 = a[1];
+/**
+ * 解析 ASN.1 DER
+ */
+export function decodeDer(input) {
+		// 1. Items of ASN.1 Sequence Check
+		let a = getPosArrayOfChildren(input, 0);
 
-        // 3. getting value
-        let hR = getHexOfV(input, iTLV1);
-        let hS = getHexOfV(input, iTLV2);
+		// 2. Integer check
+		let iTLV1 = a[0];
+		let iTLV2 = a[1];
 
-        let r = new BigInteger(hR, 16);
-        let s = new BigInteger(hS, 16);
-        
-        return { r, s };
-    }
-};
+		// 3. getting value
+		let hR = getHexOfV(input, iTLV1);
+		let hS = getHexOfV(input, iTLV2);
+
+		let r = new BigInteger(hR, 16);
+		let s = new BigInteger(hS, 16);
+
+		return { r, s };
+}

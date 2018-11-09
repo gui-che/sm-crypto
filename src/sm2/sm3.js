@@ -1,5 +1,5 @@
-const { BigInteger } = require('jsbn');
-const _ = require('./utils');
+import {BigInteger} from 'jsbn'
+import _ from './utils'
 
 let copyArray = function (sourceArray, sourceIndex, destinationArray, destinationIndex, length) {
     for (let i = 0; i < length; i++) destinationArray[destinationIndex + i] = sourceArray[sourceIndex + i];
@@ -57,7 +57,7 @@ const Int32 = {
     }
 };
 
-class SM3Digest {
+export default class SM3Digest {
     constructor() {
         this.xBuf = new Array();
         this.xBufOff = 0;
@@ -324,5 +324,3 @@ class SM3Digest {
         return md
     }
 }
-
-module.exports = SM3Digest;

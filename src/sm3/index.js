@@ -99,7 +99,7 @@ function add(x, y) {
 
         return [carry, a];
     });
-    
+
     return result;
 }
 
@@ -208,7 +208,7 @@ function CF(V, Bi) {
     return xor([A, B, C, D, E, F, G, H].join(''), V);
 }
 
-module.exports = function(str) {
+export default function(str) {
     const binary = str2binary(str);
 
     // 填充

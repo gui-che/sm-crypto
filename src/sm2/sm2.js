@@ -1,9 +1,14 @@
-const { BigInteger } = require('jsbn');
-const { ECPointFp } = require ('./ec');
-const SM3Digest = require('./sm3');
-const _ = require('./utils');
+import {BigInteger} from 'jsbn'
+import {
+	ECPointFp,
+	ECFieldElementFp,
+	ECCurveFp,
+} from './ec'
 
-class SM2Cipher {
+import SM3Digest from './sm3'
+import _ from './utils'
+
+export default class SM2Cipher {
     constructor() {
         this.ct = 1;
         this.p2 = null;
@@ -82,12 +87,10 @@ class SM2Cipher {
         this.sm3c3.doFinal(c3, 0);
         this.reset()
     }
-    
+
     createPoint(x, y) {
         let publicKey = '04' + x + y;
         let point = ECPointFp.decodeFromHex(_.generateEcparam().curve, publicKey);
         return point
     }
 }
-
-module.exports = SM2Cipher;

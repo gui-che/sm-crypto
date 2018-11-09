@@ -1,4 +1,4 @@
-const { BigInteger } = require('jsbn');
+import {BigInteger} from 'jsbn'
 
 /**
  * thanks for Tom Wu : http://www-cs-students.stanford.edu/~tjw/jsbn/
@@ -10,7 +10,7 @@ const { BigInteger } = require('jsbn');
 
 const THREE = new BigInteger('3');
 
-class ECFieldElementFp {
+export class ECFieldElementFp {
     constructor(q, x) {
         this.x = x;
         this.q = q;
@@ -51,7 +51,7 @@ class ECFieldElementFp {
     }
 }
 
-class ECPointFp {
+export class ECPointFp {
     constructor(curve, x, y, z) {
         this.curve = curve;
         this.x = x;
@@ -217,7 +217,7 @@ class ECPointFp {
     }
 }
 
-class ECCurveFp {
+export class ECCurveFp {
     constructor(q, a, b) {
         this.q = q;
         this.a = this.fromBigInteger(a);
@@ -274,9 +274,3 @@ class ECCurveFp {
         }
     }
 }
-
-module.exports = {
-    ECFieldElementFp,
-    ECPointFp,
-    ECCurveFp,
-};

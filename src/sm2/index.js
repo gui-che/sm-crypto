@@ -1,9 +1,14 @@
-const { BigInteger } = require('jsbn');
-const { encodeDer, decodeDer } = require('./asn1');
-const { ECPointFp } = require ('./ec');
-const SM3Digest = require('./sm3');
-const SM2Cipher = require('./sm2');
-const _ = require('./utils');
+import {BigInteger} from 'jsbn'
+import { encodeDer, decodeDer } from './asn1'
+import {
+	ECPointFp,
+	ECFieldElementFp,
+	ECCurveFp,
+} from './ec'
+
+import SM3Digest from './sm3'
+import SM2Cipher from './sm2'
+import _ from './utils'
 
 let { G, curve, n } = _.generateEcparam();
 const C1C2C3 = 0;
@@ -161,13 +166,13 @@ function doVerifySignature(msg, signHex, publicKey, { der, hash } = {}) {
  */
 function doSm3Hash(hashHex, publicKey) {
     let smDigest = new SM3Digest();
-    
+
     let z = new SM3Digest().getZ(G, publicKey.substr(2, 128));
     let zValue = _.hexToArray(_.arrayToHex(z).toString());
-    
+
     let p = hashHex;
     let pValue = _.hexToArray(p);
-    
+
     let hashData = new Array(smDigest.getDigestSize());
     smDigest.blockUpdate(zValue, 0, zValue.length);
     smDigest.blockUpdate(pValue, 0, pValue.length);
@@ -199,11 +204,11 @@ function getPoint() {
     return keypair;
 };
 
-module.exports = {
-    generateKeyPairHex: _.generateKeyPairHex,
-    doEncrypt,
-    doDecrypt,
-    doSignature,
-    doVerifySignature,
-    getPoint,
+export default {
+  generateKeyPairHex: _.generateKeyPairHex,
+  doEncrypt,
+  doDecrypt,
+  doSignature,
+  doVerifySignature,
+  getPoint,
 };
